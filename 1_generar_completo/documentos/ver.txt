@@ -1,1 +1,9 @@
-no son comprimidos 
+aqui se guardaba la carpeta con todas las carpetas con documentos 
+-principal
+      -carpeta
+          -doc
+          - doc
+          -doc
+      -carpeta 
+      -carpeta
+      -carpeta
