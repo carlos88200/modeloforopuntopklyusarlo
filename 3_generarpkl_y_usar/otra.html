@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <nav>
+        <input type="text" id="tex">
+    </nav>
+
+    <ol id="lista">
+        <li>hola</li>
+        <li>¿cómo estás?</li>
+        <li>me alegra verte</li>
+        <li>¿qué tal tu día?</li>
+        <li>hace buen tiempo hoy</li>
+        <li>he estado aprendiendo cosas nuevas</li>
+        <li>me encanta conversar contigo</li>
+        <li>¿tienes algún plan para el fin de semana?</li>
+        <li>me gustaría saber más sobre tus intereses</li>
+        <li>¿te gustan las películas o las series?</li>
+        <li>he probado algunas recetas últimamente</li>
+        <li>¿te gustaría que te recomiende algo?</li>
+        <li>la tecnología siempre está cambiando</li>
+        <li>el arte es una forma fascinante de expresarse</li>
+        <li>¿tienes algún hobby que disfrutes mucho?</li>
+    </ol>
+    <script>
+        tex = document.getElementById("tex");
+        console.log("va a  4", tex.value, length)
+
+        tex.addEventListener("input", function () {
+            console.log("entro", tex.value, length)
+            if (tex.value.length == 0) {
+                for (let i = 0; i < li.length; i++) {
+                    li[i].style.display = "";
+                }
+            } else {
+                texto = tex.value.toLowerCase()
+
+                li = document.getElementById("lista").getElementsByTagName("li")
+                for (i = 0; i < li.length; i++) {
+                    liesta = li[i].textContent.toLowerCase();
+                    if (liesta.includes(texto)) {
+                        li[i].style.display = ""
+                    } else {
+                        li[i].style.display = "none"
+
+                    }
+                }
+            }
+
+
+        }
+        );
+    </script>
+
+</body>
+
+</html>

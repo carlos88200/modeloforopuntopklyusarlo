@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            width: 100%;
+
+            height: 100%;
+        }
+        body{
+            background-color: rgb(255, 255, 255);
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+            color: white;
+            font-size: large;
+            font-family: Arial, Helvetica, sans-serif;
+            height: 70px;
+
+
+        }
+
+        li:hover {
+            background-color: rgb(1, 46, 1);
+            border-left: 7px solid orangered;
+
+
+
+        }
+
+        aside {
+            background-color: rgb(1, 68, 1);
+            width: 20%;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            padding-top: 5%;
+            height: auto;
+            /* min-height: 100%; */
+            height: 100%;
+        }
+
+        main {
+            background-color: rgb(254, 255, 233);
+            width: 80%;
+            align-items: center;
+            padding: 3px;
+            height: auto;
+            min-height: 100%;
+            overflow: auto;
+        }
+
+        #butonseleccionado,
+        #butonseleccionadodps {
+            background-color: transparent;
+            border: none;
+            color: rgb(255, 255, 255);
+            width: 100%;
+            height: 100%;
+
+        }
+
+        #butonseleccionadorow {
+            background-color: transparent;
+            border: 2px solid black;
+            color: rgb(0, 0, 0);
+            width: 100%;
+            height: 100%;
+        }
+
+
+        #todaslas {
+            text-align: center;
+        }
+
+        #nombre {
+            color: blue;
+        }
+
+        thead {
+            border-bottom: 2px solid black;
+        }
+
+        #pregunta,
+        #preguntaa,
+        #resptab {
+            display: none;
+        }
+
+        @media (max-width: 664px) {
+            aside {
+                width: 30%;
+                text-align: center;
+            }
+
+            main {
+                width: 70%;
+            }
+        }
+
+        @media (max-width: 733px) {
+            aside {
+                width: 30%;
+
+            }
+
+            main {
+                width: 70%;
+            }
+
+            ul {
+                display: block;
+            }
+        }
+
+        @media (max-width: 525px) {
+            aside {
+                width: 100%;
+                height: 15%;
+                flex-direction: row;
+            }
+
+            #uno {
+                height: 85%;
+            }
+
+            html,
+            body {
+                flex-direction: column;
+            }
+
+            #uul {
+                position: absolute;
+                left: 15px;
+                margin-top: 10px;
+                background-color: rgb(1, 68, 1);
+                display: none;
+                box-shadow: 3px 3px rgba(0, 0, 0, 0.315);
+            }
+
+            li {
+                width: 100%;
+            }
+
+            main {
+                width: 100%;
+            }
+
+            aside {
+                text-align: left;
+            }
+
+            aside #menu {
+                display: block;
+
+            }
+
+        }
+
+        #menu {
+            background-color: rgba(7, 223, 7, 0.274);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            box-shadow: 4px 4px rgba(0, 0, 0, 0.918);
+            left: 5px;
+            position: relative;
+            display: none;
+        }
+
+
+        tr:hover {
+            background-color: rgb(237, 238, 222);
+        }
+
+        #respuesta {
+            background-color: rgba(7, 223, 7, 0.274);
+            margin: 10px;
+        }
+
+        #pensando {
+            display: none;
+        }
+
+        #pensandodos {
+            display: none;
+        }
+
+        #uno,
+        #dos {
+            width: 100%;
+        }
+
+        #uno {
+            display: block;
+        }
+
+        #dos {
+            display: none;
+        }
+
+        #Preguntados {
+            background-color: rgb(236, 236, 236);
+            width: 87%;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 5px 5px 1px rgba(0, 0, 0, 0.178);
+            height: 50px;
+        }
+
+        #Preguntados:focus {
+            outline: none;
+
+        }
+
+        #Botonpreg {
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 50%;
+            margin-left: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.336);
+        }
+
+        #Botonpreg:active {
+            transform: scale(.90);
+        }
+
+        #respuestados {
+            border-radius: 5px;
+            margin: 5px;
+            margin-top: 30px;
+            width: 95%;
+            background-color: rgba(7, 206, 7, 0.664);
+            position: relative;
+            left: 5px;
+            max-width: 95%;
+            display: none;
+            padding: 5px;
+
+        }
+        table{
+            overflow-y: auto;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <aside>
+        <button id="menu" onclick="activarmenu()">═</button>
+        <ul id="uul">
+            <li><input onclick="uno()" type="button" id="butonseleccionado" value="Todas las preguntas"></li>
+            <li><input onclick="dos()" type="button" id="butonseleccionadodps" value="prueba"></li>
+
+        </ul>
+
+    </aside>
+    <main>
+        <div id="uno">
+            <!---->
+            <div id="todaslas"
+                style="display: flex; flex-direction: row; justify-content: space-between; align-content: center; align-items: center;">
+                <h2>Todas las preguntas</h2>
+                <input id="te" type="text"
+                    style="width: 40%; height: 10%; margin-left: 5%; position: relative; right: 0px;">
+            </div>
+            <hr>
+            <h6>Bienvenido(a): <span id="nombre">Carlos Mauricio Macías González</span></h6>
+            <div id="tab">
+                <!-- <table id="tab">
+                    <thead>
+                        <tr>
+                            <th>
+                                FOLIO
+
+                            </th>
+                            <th>ASUNTO</th>
+                            <th>CATEGORIA</th>
+                            <th>GRUPO OPERATIVO</th>
+                            <th>FECHA</th>
+                            <th>ESTADO</th>
+                            <th id="pregunta">
+                                pregunta
+                            </th>
+                            <th id="resptab"></th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr class="prueba">
+                            <td><button onclick="prueba(event)" type="button" id="butonseleccionadorow"
+                                    class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">2066</button></td>
+                            <td>Cambio de domicilio, dice y debe decir ENA2025</td>
+                            <td>OC RUTINA OPERATIVA Y ESTRATEGIA</td>
+                            <td>General</td>
+                            <td>23-OCT.-2025 12:47</td>
+                            <td>Pendiente</td>
+                            <td id="preguntaa">EL formato "Cambio de domicilio, dice y debe decir ENA2025" que se llena
+                                cuando la localidad del cambio de domicilio se encuentra en el área de influencia del
+                                entrevistador, también debe llenarse en el caso de que ella localidad del cambio de
+                                domicilio no se encuentre en el área de influencia del entrevistador ?</td>
+                            <td id="resptab"></td>
+
+                        </tr>
+                        <tr>
+                            <td><button onclick="prueba(event)" type="button" id="butonseleccionadorow"
+                                    class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">2067</button></td>
+                            <td>Agricultura protegida con malla sombra temporal</td>
+                            <td>DISEÑO CONCEPTUAL</td>
+                            <td>General</td>
+                            <td>24-OCT.-2025 11:55</td>
+                            <td>Pendiente</td>
+                            <td id="preguntaa">Es un cultivo de manzana y comenta que dependiendo el clima le ponen o no
+                                como una malla sombra, que si se tiene que capturar como agricultura protegida.</td>
+                            <td id="resptab"></td>
+
+
+                        </tr>
+                    </tbody>
+                </table> -->
+
+
+
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                FOLIO
+
+                            </th>
+                            <th>ASUNTO</th>
+                            <th>CATEGORIA</th>
+
+                            <th>GRUPO OPERATIVO</th>
+                            <th>FECHA</th>
+                            <th>ESTADO</th>
+                            <th id="pregunta">
+                                pregunta
+                            </th>
+                            <th id="resptab"></th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody id="introduccion">
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div id="dos">
+            <h1>Pregunta:</h1>
+            <input id="Preguntados" type="text">
+            <button id="Botonpreg" onclick="responderods()">?</button>
+            <br>
+            <br>
+            <div id="pensandodos">
+                <div class="spinner-grow text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow text-secondary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow text-danger" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow text-warning" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow text-info" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow text-light" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="spinner-grow text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div id="respuestados">
+
+                <p id="respuestadosp"></p>
+            </div>
+        </div>
+
+    </main>
+    <div id="modal">
+        <!-- Button trigger modal -->
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Asunto: </h1>
+
+                        <h1 class="modal-title fs-5" id="ASUNTO"> </h1>
+
+                    </div>
+                    <div class="modal-body">
+                        <label><strong>Categoria: </strong> </label>
+                        <label id="CATEGORIA"></label>
+                        <br>
+                        <label><strong>Pregunta: </strong> </label>
+                        <p id="preguntatexto"></p>
+                        <div id="pensando">
+                            <div class="spinner-grow text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-secondary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-success" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-danger" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-warning" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-info" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-light" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="spinner-grow text-dark" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div id="respuestaespacio">
+                            <p id="respuesta"></p>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="responder()" class="btn btn-success">Responder</button>
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+        <script>
+            te = document.getElementById("te");
+
+
+            te.addEventListener("input", function () {
+                let query = te.value.toLowerCase();
+                let encontrado = false;
+                if (te.value.length > 0) {
+
+                    console.log(query)
+                }
+                tr = document.getElementById("tab").getElementsByTagName("tr");
+                for (let i = 1; i < tr.length; i++) {
+                    let celda = tr[i].getElementsByTagName("td");
+                    let pregunta = celda[6].textContent.toLowerCase();
+                    console.log("preg", pregunta)
+                    if (pregunta.includes(query)) {
+                        tr[i].style.display = ""
+                        encontrado = true
+                    } else {
+                        tr[i].style.display = "none"
+                    }
+                }
+                if (!encontrado && query.length > 0) {
+                    console.log("no encontrado")
+                }
+            });
+
+
+
+            function prueba(event) {
+                asunto = document.getElementById("ASUNTO")
+                categoria = document.getElementById("CATEGORIA")
+                //gripop = document.getElementById("GRUPOOPERATIVO")
+                //fecha = document.getElementById("FECHA")
+                //estado = document.getElementById("ESTADO")
+                preguntaimp = document.getElementById("preguntatexto")
+                respuesta = document.getElementById("respuesta")
+                respuesta.textContent = ""
+                let boton = event.target;
+                let row = boton.closest("tr");
+                console.log(row)
+                console.log(row.cells[1])
+                console.log(row.cells[6])
+                let ASUNTO = row.cells[1].textContent;
+                let CATEGORIA = row.cells[2].textContent;
+                let GRUPOOperativo = row.cells[3].textContent;
+                let FECHA = row.cells[4].textContent;
+                let ESTADO = row.cells[5].textContent;
+                let pregunta = row.cells[6].textContent;
+                //console.log("tiene preg", pregunta);
+
+                asunto.textContent = ASUNTO;
+                categoria.textContent = CATEGORIA;
+
+
+
+                //fecha.textContent =FECHA;
+
+                //estado.textContent = ESTADO;
+
+                preguntaimp.textContent = pregunta
+
+
+
+            }
+            function responder() {
+
+                let pensando = document.getElementById("pensando")
+                pensando.style.display = "block"
+                let pregunta = document.getElementById("preguntatexto")
+                console.log("va a preguntar...")
+                let respuesta = document.getElementById("respuesta")
+                axios.post(" http://127.0.0.1:8000/pregunta", {
+                    pregunta: pregunta.textContent
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        pensando.style.display = "none"
+                        console.log(`Respuesta ${response.data} \n`)
+                        re = response.data
+                        // rem = re.replace('\n', '<br>')
+                        let rem = re.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+                        // respuesta.textContent = response.data
+                        respuesta.innerHTML = rem
+
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        pensando.style.display = "none"
+
+                        respuesta.textContent = "Error"
+                    })
+            }
+            function responderods() {
+                let pensando = document.getElementById("pensandodos")
+                pensando.style.display = "block"
+                let pregunta = document.getElementById("Preguntados")
+                
+                let respuesta = document.getElementById("respuestadosp")
+                let div = document.getElementById("respuestados")
+
+                axios.post(" http://127.0.0.1:8000/pregunta", {
+                    pregunta: pregunta.value
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        pensando.style.display = "none"
+                        respuesta.style.display = "block"
+                        respuestados.style.display = "block"
+                        respuesta.textContent = response.data
+                        pregunta.value = ""
+
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        pensando.style.display = "none"
+                        respuesta.style.display = "block"
+                        respuestados.style.display = "block"
+                        div.style.backgroundColor = "red"
+                        respuesta.textContent = `Error ${error.message}`
+                        pregunta.value = ""
+
+                    })
+            }
+            function uno() {
+                let dos = document.getElementById("dos");
+                let uno = document.getElementById("uno");
+
+                // Cambia el display de los divs
+                uno.style.display = "block";  // Muestra el div uno
+                dos.style.display = "none";   // Oculta el div dos
+            }
+
+            function dos() {
+                let dos = document.getElementById("dos");
+                let uno = document.getElementById("uno");
+
+                // Cambia el display de los divs
+                dos.style.display = "block";  // Muestra el div dos
+                uno.style.display = "none";   // Oculta el div uno
+            }
+
+            let menu = document.getElementById("menu")
+            let ul = document.getElementById("uul")
+            function activarmenu() {
+                console.log(ul.style.display)
+                if (ul.style.display === "none" || ul.style.display === "") {
+                    ul.style.display = "block";
+                } else {
+                    ul.style.display = "none";
+                }
+                window.addEventListener('resize', function () {
+                    if (window.innerWidth > 530) {
+                        // Asegurarse de que el menú esté siempre visible cuando la ventana sea mayor a 664px
+                        document.getElementById("uul").style.display = "block";
+                    } else if (document.getElementById("uul").style.display === "") {
+                        // Si el menú está por defecto oculto en pantallas pequeñas
+                        document.getElementById("uul").style.display = "none";
+                    }
+                });
+
+            }
+
+
+
+
+
+
+
+
+
+
+            introduccion = document.getElementById("introduccion")
+            let temporal = ""
+            function cargardatos() {
+                console.log("cargando")
+                axios.post(" http://127.0.0.1:8000/cargardatos")//http://127.0.0.1:8000/cargardatos
+                    .then(response => {
+                        // console.log(response.data)
+                        let datos = response.data
+                        // console.log("datos: ",datos)
+                        console.log(datos)
+                        datos.forEach(element => {
+                            temporal += `<tr class=\"prueba\"><td><button onclick=\"prueba(event)\" type=\"button\" id=\"butonseleccionadorow\"class=\"btn btn-primary\" data-bs-toggle=\"modal\"data-bs-target=\"#exampleModal\">${element["ID_PREGUNTA"]}</button></td><td>${element["ASUNTO"]}</td><td>${element["CATEGORIA"]}</td><td>${element["GRUPOOPERATIVO"]}</td><td>${element["FECHA"]}</td><td>${element["ESTATUS_PREGUNTA"]}</td><td id=\"preguntaa\">${element["TEXTO_PREGUNTA"]}</td><td id=\"resptab\"></td></tr>`;
+
+                        });
+                        //console.log(temporal)
+                        introduccion.innerHTML = temporal
+
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            }
+            cargardatos()
+
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+            integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>
